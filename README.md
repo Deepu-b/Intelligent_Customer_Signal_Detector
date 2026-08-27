@@ -57,27 +57,64 @@ The **Intelligent Customer Signal Detector** is an AI prototype that continuousl
 
 ---
 
-## Key Differentiator: Cognitive Synthesis vs. Naive Sentiment
+## End-to-End Example: Input Data vs. AI Cognitive Output
 
-Traditional keyword or sentiment models fail in enterprise FinTech environments:
-1. **The Polite Silent Churner:** A customer with a ₹3.4 Crore portfolio experiencing 840ms latency politely inquires about daily RTGS transfer limits while refusing to open more tickets. Naive sentiment scores this as *"Neutral/Polite"*, completely missing an imminent **₹95 Lakh capital flight**.
-2. **The Passive Power User:** A loyal trader submitting 4 tickets with UX suggestions and charting feature requests is falsely flagged by naive rule-based filters (*"Tickets >= 4"*), causing ops teams to waste retention resources on an already-delighted customer.
+### 1. Raw Input Profile (`Payal Rao` • `CUST-1031`)
 
-Our Stage-2 Cognitive Synthesizer uses **Google Gemini** (`gemini-3.5-flash-lite` / `gemini-3.5-flash`) to perform true multi-signal correlation:
+#### A. Structured Telemetry & Operational Metrics:
+| Metric Field | Ingested Value | Operational Interpretation |
+| :--- | :--- | :--- |
+| **Customer ID / Name** | `CUST-1031` / `Payal Rao` | High Net-Worth Individual (HNI Tier) |
+| **Portfolio Value (AUM)** | **₹230.2 Lakhs** (₹2.30 Crore) | High financial sensitivity |
+| **30-Day Trading Volume Change** | **-89.3%** | Severe activity collapse |
+| **30-Day Net Capital Outflow** | **₹111.6 Lakhs** (48.5% of AUM) | Massive capital drainage in progress |
+| **Avg Order Routing Latency** | **930 ms** | 9x higher than platform baseline (100ms) |
+| **Failed Orders (30d)** | **14 failed orders** | Critical order execution failures |
+| **Support Tickets (30d)** | **2 tickets** | Low ticket volume despite extreme friction |
+| **Stage-1 Anomaly Filter** | **Score: 90.1/100** | 5/5 risk rules triggered $\rightarrow$ Flagged for Stage-2 AI |
 
+#### B. Raw Unstructured Interaction Transcript:
+```text
+Customer: The desktop trading terminal crashed twice right at 9:15 AM open. I couldn't modify my bracket orders. 
+Representative: We had a microservice lag during the market opening tick surge. It has been resolved. 
+Customer: Losing money because of your system latency is unacceptable. I have attached the error screenshots.
+```
+
+---
+
+### 2. Generated Output: AI Cognitive Synthesis & Retention Playbook
+
+#### A. Machine-Readable Structured JSON Payload:
 ```json
 {
-  "customer_id": "CUST-1001",
+  "customer_id": "CUST-1031",
   "risk_level": "Critical",
-  "risk_score": 96,
+  "risk_score": 98,
   "urgency_window": "< 24 Hours",
-  "primary_risk_driver": "Silent HNI Capital Flight",
-  "agent_situation_summary": "HNI customer Vikramaditya Singhania is liquidating custodial assets following execution delays. Immediate Principal RM outreach required before remaining balance is transferred.",
-  "signal_correlation_rationale": "Customer experienced severe platform latency (840ms) during market open, resulting in an 82% trading collapse. Unstructured transcript reveals polite refusal of support tickets paired with an inquiry on RTGS transfer limits, directly explaining the ₹95.0 Lakhs capital drainage.",
-  "prescriptive_action": "Urgent White-Glove intervention: Assign Principal Relationship Manager for an executive briefing and custom custodial fee tier within 2 hours.",
+  "primary_risk_driver": "Execution Failure & High-Value Capital Outflow",
+  "agent_situation_summary": "High-Net-Worth client Payal Rao experienced platform crashes during market open leading to direct financial losses and massive capital outflows. The frontline representative must immediately escalate this to senior account management and arrange a direct phone outreach with compensation discussions.",
+  "signal_correlation_rationale": "The customer's frustrated transcript regarding morning terminal crashes and unmodifiable bracket orders directly correlates with an alarming 930.3 ms routing latency and 14 failed orders in the last 30 days. This technical friction has directly precipitated catastrophic behavioral anomalies, including an 89.3% drop in trading volume and a massive net capital outflow of ₹11.16 million from an HNI portfolio.",
+  "prescriptive_action": "Deploy dedicated HNI Retention Squad for white-glove executive outreach within 2 hours, offer temporary fee waivers or execution credit to offset losses, and route her terminal to a low-latency dedicated institutional gateway.",
   "confidence_score": 0.98
 }
 ```
+
+#### B. Operational Command Center View (Frontline Representative Dashboard):
+- **AI Risk Level & Score:** `CRITICAL (98/100)` • Urgency: `< 24 Hours` • Confidence: `98%`
+- **Frontline Situation Brief:** *“High-Net-Worth client Payal Rao experienced platform crashes during market open leading to direct financial losses and massive capital outflows. The frontline representative must immediately escalate this to senior account management and arrange a direct phone outreach with compensation discussions.”*
+- **Prescriptive Action Plan:** *“Deploy dedicated HNI Retention Squad for white-glove executive outreach within 2 hours, offer temporary fee waivers or execution credit to offset losses, and route her terminal to a low-latency dedicated institutional gateway.”*
+
+![Payal Rao Operational Profile](image.png)
+
+![Payal Rao AI Insight Output](image-1.png)
+
+---
+
+## Key Differentiator: Cognitive Synthesis vs. Naive Sentiment
+
+Traditional sentiment analysis models fail when applied to enterprise FinTech operations:
+1. **The Polite Silent Churner:** A customer with a ₹3.4 Crore portfolio experiencing 840ms latency politely inquires about daily RTGS transfer limits while refusing to open more tickets. Naive sentiment scores this as *"Neutral/Polite"*, missing an imminent **₹95 Lakh capital flight**.
+2. **The Passive Power User:** A loyal trader submitting 4 tickets with UX suggestions and charting feature requests is falsely flagged by naive rule-based filters (*"Tickets >= 4"*), causing ops teams to waste retention resources on an already-delighted customer.
 
 ---
 
@@ -109,24 +146,22 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configure API Key (Optional)
-Copy the example environment template:
+Copy the example environment configuration template:
 ```bash
 cp .env.example .env
 ```
-Open `.env` and add your **free Google Gemini API Key** from [Google AI Studio](https://aistudio.google.com/):
+Edit `.env` and add your **free Google Gemini API Key** from [Google AI Studio (aistudio.google.com)](https://aistudio.google.com/):
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
-> **Note:** You can also paste your API key directly into the sidebar text field in the web app, or run the app without an API key (Stage-1 Telemetry Anomaly Screening is always active).
+> **Note:** You can also paste your API key directly into the sidebar text field inside the web application, or run the app without an API key (Stage-1 Telemetry Anomaly Screening is always active).
 
 ### 3. Generate Mock Data (Optional)
-The repository includes pre-generated synthetic customer records. To generate a fresh randomized cohort:
 ```bash
 python3 src/generate_data.py
 ```
-*(You can also click the "Randomize Customer Cohort" button inside the web app sidebar at any time).*
 
-### 4. Launch the Operations Command Center
+### 4. Launch the Streamlit Operations Command Center
 ```bash
 ./run.sh
 # Or directly via streamlit:
